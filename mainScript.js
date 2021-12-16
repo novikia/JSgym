@@ -11,12 +11,11 @@ function showHaffmanCode(string) {
         arrayKeyValue = Object.entries(letterVariation)
             .sort((x, y) => x[1] - y[1]),
         arrayNodes = arrayKeyValue.map(el => new Node(el[0], el[1], null, null)),
-        lastNode = arrayNodes[arrayNodes.length-1];
+        lastNode = arrayNodes.pop();;
     console.log( 'letterVariation: ' + JSON.stringify(letterVariation));
     console.log('arrayKeyValue: ' + JSON.stringify(arrayKeyValue));
     console.log('arrayNodes: ' + JSON.stringify(arrayNodes));
     console.log('lastNode: ' + JSON.stringify(lastNode));
-    arrayNodes.pop();
     while(arrayNodes.length > 1) {
         const nextNode = new Node(null, arrayNodes[0].variation + arrayNodes[1].variation, arrayNodes[0], arrayNodes[1])
         arrayNodes.push(nextNode);
