@@ -8,24 +8,39 @@ function showHaffmanCode(string) {
         }
     }
     let letterVariation = string.split('').reduce((acc, l) => acc[l] ? (acc[l]++, acc) : (acc[l] = 1, acc), {}),
-        arrayKeyValue = Object.entries(letterVariation)
-            .sort((x, y) => x[1] - y[1]),
-        arrayNodes = arrayKeyValue.map(el => new Node(el[0], el[1], null, null)),
-        lastNode = arrayNodes.pop();;
-    console.log( 'letterVariation: ' + JSON.stringify(letterVariation));
-    console.log('arrayKeyValue: ' + JSON.stringify(arrayKeyValue));
-    console.log('arrayNodes: ' + JSON.stringify(arrayNodes));
-    console.log('lastNode: ' + JSON.stringify(lastNode));
+        arrayNodes = Object.entries(letterVariation).map(el => new Node(el[0], el[1], null, null)),
+        lastNode = arrayNodes.sort((a, b) => a.variation - b.variation).pop();
+
     while(arrayNodes.length > 1) {
         const nextNode = new Node(null, arrayNodes[0].variation + arrayNodes[1].variation, arrayNodes[0], arrayNodes[1])
         arrayNodes.push(nextNode);
         arrayNodes = arrayNodes.slice(2);
+        arrayNodes.sort((a, b) => a.variation - b.variation);
     }
+
     const treeNodes = new Node(null, null, lastNode, arrayNodes[0]);
-    console.log('treeNodes: ' + JSON.stringify(treeNodes));
+
     function getSumVariation(node) {
         return !node.right && !node.left ? node.variation : node.variation + getSumVariation(node.left) + getSumVariation(node.right);
     }
-    return getSumVariation(treeNodes);
+
+    function printCode(node, code, obj) {
+        if(!node.left && !node.right) {
+            return code;
+        } else if(node.left) {
+            printCode(node.left, code + '0')
+            obj[node.value] = code;
+        } else if(node.right) {
+            printCode(node.right, code + '1')
+        }
+        return obj;
+    }
+
+    let obj = {};
+    printCode(treeNodes, '', obj);
+
+
+    return  [letterVariation, treeNodes, obj];
+
 }
 console.log(showHaffmanCode('abacabad'))
