@@ -1,7 +1,7 @@
 //https://www.codewars.com/kata/569df0bc5565b243d500002b
 function findUs(n1, n2, k, factors, digits) {
     const [min, max] = [n1, n1 + k * n2], result = [];
-    const inout = function(num, arr) {
+    /*const inout = function(num, arr) {
         for(let key of arr) {
             if( !new RegExp(`${key}`).test(String(num)) ) {
                 return false;
@@ -16,9 +16,18 @@ function findUs(n1, n2, k, factors, digits) {
             }
             result.push(i);
         }
-    return result;
+    return result;*/
+  var multiplication = factors.reduce((i,j)=>i*j, 1);
+  var start = Math.ceil(min/multiplication) * multiplication;
+  var end = Math.floor(max/multiplication) * multiplication;
+  for (let i = start; i <= end; i += multiplication){
+    let strNum = i.toString();
+    if (digits.every(d => strNum.includes(d))){
+      result.push(i);
+    }
+  }
+  return result;
 }
-
 //https://www.codewars.com/kata/5a5cdb07fd56cbdd3c00005b
 function findDupsMiss(arr) {
     let notRepeat = new Set(arr);
